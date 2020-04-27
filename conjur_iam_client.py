@@ -16,7 +16,7 @@ REQUEST_PARAMETERS = 'Action=GetCallerIdentity&Version=2011-06-15'
 
 class ConjurIAMAuthnException(Exception):
     def __init__(self):
-        Exception.__init__(self,"Conjur IAM auithentication failed with 401 - Unauthorized. Check conjur logs for more information") 
+        Exception.__init__(self,"Conjur IAM authentication failed with 401 - Unauthorized. Check conjur logs for more information") 
 
 class IAMRoleNotAvailableException(Exception):
     def __init__(self):
@@ -208,6 +208,5 @@ def create_conjur_iam_client_from_env(iam_role_name=None, access_key=None, secre
 # Examples of using methods:
 # get_conjur_iam_session_token(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'], os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
 # create_conjur_iam_client(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'], os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
-
 
 
