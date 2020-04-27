@@ -11,15 +11,26 @@ For general contribution and community guidelines, please see the [community rep
 
 ## Development
 
-[What development tools are required to start working on this project?]
+- Python3.6 or greater
+- Valid AWS IAM credentials
 
 ## Testing
 
-[Instructions for running the test suite]
+Currently all tests are done manually.
 
 ## Releases
 
-[Instructions for creating a new release]
+Our release process generally follows this pattern for most projects:
+
+1. The maintainers agree that a release should be made from current work on default branch. This
+   may include 1 or more individuals and can include input from project management, product
+   management, technical writers, infrastructure, etc.
+2. [**Annotated** git tag is created](https://github.com/cyberark/community/blob/master/Conjur/CONTRIBUTING.md#tagging).
+3. [Draft release is created](https://github.com/cyberark/community/blob/master/Conjur/CONTRIBUTING.md#draft-release-creation) from that tag.
+4. After some local smoke testing, a [pre-release is published](https://github.com/cyberark/community/blob/master/Conjur/CONTRIBUTING.md#pre-release-publishing).
+5. Finally, after some project-dependent amount of user testing, the pre-release is then
+   [published as a regular release](https://github.com/cyberark/community/blob/master/Conjur/CONTRIBUTING.md#release-publishing).
+
 
 ## Contributing workflow
 
