@@ -62,7 +62,9 @@ conjur_client.list() # This will return a list of all the resource you have acce
 
 #### create_conjur_iam_client_from_env
 
-This function returns a client exactly like the function above. However instead of providing all of the parameters within the function it will read the parameters from the environment variables mentioned in the 'Setting environment variables' section.
+This function returns a client exactly like `create_conjur_iam_client`; however instead of providing all of the
+parameters within the function, it will read the parameters from the environment variables described in the
+[setting environment variables](#setting-the-environment-variables) section.
 
 ```python
 from conjur_iam_client import *
