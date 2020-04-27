@@ -1,6 +1,11 @@
 # conjur-authn-iam-client-python
 Get an IAM signed request used for Conjur authentication or instantiate a Conjur SDK Python3 client using IAM authentication.
-- ![](https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
+
+## Certification Level
+![](https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
+
+This repo is a **Community** level project. It's a community contributed project that **is not reviewed or supported
+by CyberArk**. For more detailed information on our certification levels, see [our community guidelines](https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md#community).
 
 ## Requirements
 - Conjur OSS v1+
