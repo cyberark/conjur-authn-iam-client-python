@@ -1,35 +1,151 @@
-# {Your project name}
-TODO: Insert brief description of your project
-
-TODO:
-- [ ] Edit the [`CONTRIBUTING.md`](./CONTRIBUTING.md) with development and contribution
-  guidelines for your specific project
-- [ ] Update the [feature templates](./.github/ISSUE_TEMPLATE/) with the correct labels
-  for your specific project
-- [ ] Fill out this README, addressing all TODOs
-- [ ] The project comes by default with an [Apache 2.0 License](./LICENSE) - if you would
-  prefer to use some other license, you'll need to revise this file
-
-TODO: Select the appropriate certification level icon below
-- ![](https://img.shields.io/badge/Certification%20Level-Certified-6C757D?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
-- ![](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
+# conjur-authn-iam-client-python
+Get an IAM signed request used for Conjur authentication or instantiate a Conjur SDK Python3 client using IAM authentication.
 - ![](https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
 
 ## Requirements
+- Conjur OSS v1+
+- DAP v10+
+- python >= 3.6
+- summon >= 0.6.9
 
-TODO: Add any requirements that apply to your project here. Which Conjur / DAP versions is it
-compatible with? Does it integrate with other tools / projects - and if so, what versions of those
-does it require?
+## Installation
 
-## Usage instructions
+### From source
+```bash
+$ pip3 install --user conjur-client
+$ git clone https://github.com/cyberark/conjur-authn-iam-client-python.git
+$ cd conjur-authn-iam-client-python; pip3 install --user .
+```
 
-TODO: add details for how to use your project. Examples can be quite nice here. You should have
-a high level overview of the benefit of your project and its main use cases.
+## Usage Instructions
+
+#### create_conjur_iam_api_key
+
+This function returns a JSON-formatted [AWS signature](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) header that can be used to authenticate to Conjur when using the IAM authenticator.
+
+```python
+>>> from conjur_iam_client import *
+>>> conjur_api_key = create_conjur_iam_api_key()
+```
+
+#### get_conjur_iam_session_token
+
+This function uses the `create_conjur_iam_api_key` method to retrieve the AWS signature header, uses the header to authenticate to the Conjur API, and returns a Conjur [access token](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Operations/Services/Authentication-new.htm#Accesstokens).
+
+```python
+from conjur_iam_client import *
+appliance_url = 'https://conjur.yourorg.com'
+service_id = 'dev'
+username = 'host/cust-portal/<aws-account-id>/<iam-role-name>'
+cert_file = 'conjur-cert.pem'
+conjur_account = 'dev'
+conjur_session_token = get_conjur_iam_session_token(appliance_url, conjur_account, service_id, username, cert_file)
+```
+
+#### create_conjur_iam_client
+
+This function uses the `get_conjur_iam_session_token` to create a Conjur access token and returns an
+instantiated [Conjur Python3 client](https://github.com/cyberark/conjur-api-python3). The client will not
+automatically refresh the access token, so the client can only be used for 5-8 min. After this time, this
+method must be invoked again to instantiate another client.
+
+```python
+from conjur_iam_client import *
+appliance_url = 'https://conjur.yourorg.com'
+service_id = 'dev'
+username = 'host/cust-portal/<aws-account-id>/<iam-role-name>'
+cert_file = 'conjur-cert.pem'
+conjur_account = 'dev'
+conjur_client = create_conjur_iam_client(appliance_url, conjur_account, service_id, username, cert_file)
+conjur_client.list() # This will return a list of all the resource you have access to. See https://github.com/cyberark/conjur-api-python3 for all of the methods this client supports.
+```
+
+#### create_conjur_iam_client_from_env
+
+This function returns a client exactly like `create_conjur_iam_client`; however instead of providing all of the
+parameters within the function, it will read the parameters from the environment variables described in the
+[setting environment variables](#setting-the-environment-variables) section.
+
+```python
+from conjur_iam_client import *
+conjur_client = create_conjur_iam_client_from_env()
+conjur_client.list() # This will return a list of all the resource you have access to. See https://github.com/cyberark/conjur-api-python3 for all of the methods this client supports.
+```
+
+## EC2 Usage
+In this example we will be using the `create_conjur_iam_client_from_env()` function. It is assumed an IAM role is already associated with the ec2 instance.
+
+#### Setting the environment variables
+```bash
+$ export CONJUR_APPLIANCE_URL=https://conjur.yourorg.com
+$ export AUTHN_IAM_SERVICE_ID=dev
+$ export CONJUR_AUTHN_LOGIN=host/cust-portal/<aws-account-id>/<iam-role-name>
+$ export CONJUR_CERT_FILE=./conjur-dev.pem
+$ export CONJUR_ACCOUNT=dev
+```
+
+#### Executing python script from the ec2 instance
+```python3
+from conjur import Client
+from conjur_iam_client import create_conjur_iam_client_from_env
+
+conjur_client = create_conjur_iam_client_from_env()
+conjur_list = conjur_client.list()
+```
+
+## Lambda Usage
+Since lambda cannot reach out to the AWS metadata url we have to slightly modify how we execute `create_conjur_iam_client_from_env()`. It is assumed an IAM role is already associated with the lambda function.
+
+#### Lambda environment variables
+```
+CONJUR_APPLIANCE_URL=https://conjur.yourorg.com
+AUTHN_IAM_SERVICE_ID=dev
+CONJUR_AUTHN_LOGIN=host/cust-portal/<aws-account-id>/<iam-role-name>
+CONJUR_CERT_FILE=./conjur-dev.pem
+CONJUR_ACCOUNT=dev
+IAM_ROLE_NAME=<iam-role-name>
+# Depending if you want to ignore untrusted ssl certificate
+IGNORE_SSL=<true or false>
+```
+
+#### Executing python script
+The difference here is instead of having the client reach out to the metadata url and automatically obtain the keys and tokens required to authenticate. We are fetching these and pushing them into the `create_conjur_iam_client_from_env()` function.
+```python3
+from conjur import Client
+from conjur_iam_client import create_conjur_iam_client_from_env
+import os
+
+def lambda_handler(event, context):
+    iam_role_name=os.environ['IAM_ROLE_NAME']
+    access_key=os.environ['AWS_ACCESS_KEY_ID']
+    secret_key=os.environ['AWS_SECRET_ACCESS_KEY']
+    token=os.environ['AWS_SESSION_TOKEN']
+    conjur_client = create_conjur_iam_client_from_env(iam_role_name, access_key, secret_key, token)
+    conjur_list = conjur_client.list()
+    return {
+        "list": conjur_list
+    }
+```
+
+#### 
+#### Example lambda function package
+An example of a bundled lambda function can be found [here](https://github.com/cyberark/conjur-authn-iam-client-python/blob/master/lambda_function_package.zip). **If you are using a self signed certificate make sure to replace conjur-conjur.pem with your self signed cert!**
+
+## Summon Usage
+Summon usage has only been manually tested on an EC2 instance. With that being said make sure to set the [environment variables mentioned here](#ec2-usage). `iam_provider.py` is the summon provider. The `iam_provider.py` assumes python3 is installed on the EC2 instance. Example below:
+```bash
+# this should print out the environment variables 
+# which should contain the password retrieved
+summon -p ./iam_provider.py env
+
+# using 'iam_provider.py' standalone
+./iam_provider.py path/to/secret/goes/here
+```
 
 ## Contributing
 
 We welcome contributions of all kinds to this repository. For instructions on how to get started and descriptions
-of our development workflows, please see our [contributing guide](https://github.com/cyberark/conjur-api-go/blob/master/CONTRIBUTING.md).
+of our development workflows, please see our [contributing guide](CONTRIBUTING.md).
 
 ## License
 
