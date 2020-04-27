@@ -21,7 +21,7 @@ $ cd conjur-authn-iam-client-python; pip3 install --user .
 
 #### create_conjur_iam_api_key
 
-This function will return a json formatted header used as an api key to authenticate to conjur when using authn-iam.
+This function returns a JSON-formatted [AWS signature](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) header that can be used to authenticate to Conjur when using the IAM authenticator.
 
 ```python
 >>> from conjur_iam_client import *
