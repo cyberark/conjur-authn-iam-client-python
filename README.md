@@ -1,5 +1,5 @@
 # conjur-authn-iam-client-python
-Get an IAM API key used by Conjur or get a SDK client using IAM authentication.
+Get an IAM signed request used for Conjur authentication or instantiate a Conjur SDK Python3 client using IAM authentication.
 - ![](https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
 
 ## Requirements
