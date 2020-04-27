@@ -44,7 +44,10 @@ conjur_session_token = get_conjur_iam_session_token(appliance_url, conjur_accoun
 
 #### create_conjur_iam_client
 
-This function will retrieve the session token from the method above and will initiate a conjur client for you. The conjur client returned can be found https://github.com/cyberark/conjur-api-python3. The token will not be refreshed within the client so the client can only be used for 5-8 min. After this time another client must be initiliazed with this method
+This function uses the `get_conjur_iam_session_token` to create a Conjur access token and returns an
+instantiated [Conjur Python3 client](https://github.com/cyberark/conjur-api-python3). The client will not
+automatically refresh the access token, so the client can only be used for 5-8 min. After this time, this
+method must be invoked again to instantiate another client.
 
 ```python
 from conjur_iam_client import *
