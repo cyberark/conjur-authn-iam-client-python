@@ -30,7 +30,7 @@ This function returns a JSON-formatted [AWS signature](https://docs.aws.amazon.c
 
 #### get_conjur_iam_session_token
 
-This function will retrieve the api key from the method above and then will authenticate to the conjur API and obtain a session token which can be used in subsquent calls to interact with the conjur api.
+This function uses the `create_conjur_iam_api_key` method to retrieve the AWS signature header, uses the header to authenticate to the Conjur API, and returns a Conjur [access token](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Operations/Services/Authentication-new.htm#Accesstokens).
 
 ```python
 from conjur_iam_client import *
