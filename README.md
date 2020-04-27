@@ -3,12 +3,10 @@ Get an IAM API key used by Conjur or get a SDK client using IAM authentication.
 - ![](https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
 
 ## Requirements
+- Conjur OSS v1+
+- DAP v10+
 - python >= 3.6
-TODO:
-- summon ?
-TODO: Add any requirements that apply to your project here. Which Conjur / DAP versions is it
-compatible with? Does it integrate with other tools / projects - and if so, what versions of those
-does it require?
+- summon >= 0.6.9
 
 ## Installation
 
