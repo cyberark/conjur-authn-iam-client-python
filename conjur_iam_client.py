@@ -22,6 +22,17 @@ class IAMRoleNotAvailableException(Exception):
     def __init__(self):
         Exception.__init__(self,"Most likely the ec2 instance is configured with no or an incorrect iam role") 
 
+class InvalidAwsAccountIdException(Exception):
+    def __init__(self):
+        Exception.__init__(self,"The AWS Account ID specified in the CONJUR_AUTHN_LOGIN is invalid and must be a 12 digit number") 
+
+def valid_aws_account_number(host_id):
+    parts = host_id.split("/")
+    account_id = parts[len(parts)-2]
+    if len(account_id) == 12:
+        return True
+    return False
+
 # Key derivation functions. See:
 # http://docs.aws.amazon.com/general/latest/gr/signature-v4-examples.html#signature-v4-examples-python
 def sign(key, msg):
@@ -154,6 +165,9 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
     return '{}'.format(headers).replace("'", '"')
 
 def get_conjur_iam_session_token(appliance_url, account, service_id, host_id, cert_file, iam_role_name=None, access_key=None, secret_key=None, token=None, ssl_verify=True):
+    if not valid_aws_account_number(host_id):
+        raise InvalidAwsAccountIdException()
+
     appliance_url = appliance_url.rstrip("/")
     url = "{}/authn-iam/{}/{}/{}/authenticate".format(appliance_url, service_id, account, urllib.parse.quote(host_id, safe=''))
     iam_api_key = create_conjur_iam_api_key(iam_role_name, access_key, secret_key, token)
