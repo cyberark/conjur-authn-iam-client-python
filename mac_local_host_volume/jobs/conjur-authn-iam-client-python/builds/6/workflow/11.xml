@@ -1,0 +1,27 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<Tag plugin="workflow-support@848.v5a_383b_d14921">
+  <node class="cps.n.StepStartNode" plugin="workflow-cps@3773.v505e0052522c">
+    <parentIds>
+      <string>10</string>
+    </parentIds>
+    <id>11</id>
+    <descriptorId>org.jenkinsci.plugins.workflow.support.steps.StageStep</descriptorId>
+  </node>
+  <actions>
+    <wf.a.BodyInvocationAction plugin="workflow-api@1267.vd9b_a_ddd9eb_47"/>
+    <wf.a.LabelAction plugin="workflow-api@1267.vd9b_a_ddd9eb_47">
+      <displayName>build</displayName>
+    </wf.a.LabelAction>
+    <wf.a.TimingAction plugin="workflow-api@1267.vd9b_a_ddd9eb_47">
+      <startTime>1693381308690</startTime>
+    </wf.a.TimingAction>
+    <wf.a.TagsAction plugin="workflow-api@1267.vd9b_a_ddd9eb_47">
+      <tags>
+        <entry>
+          <string>STAGE_STATUS</string>
+          <string>FAILED_AND_CONTINUED</string>
+        </entry>
+      </tags>
+    </wf.a.TagsAction>
+  </actions>
+</Tag>

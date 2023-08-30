@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: Display URL API
+Specification-Version: 2.3
+Implementation-Title: Display URL API
+Implementation-Version: 2.3.9
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: display-url-api
+Short-Name: display-url-api
+Long-Name: Display URL API
+Url: https://github.com/jenkinsci/display-url-api-plugin
+Plugin-Version: 2.3.9
+Hudson-Version: 2.361.1
+Jenkins-Version: 2.361.1
+Plugin-Developers: James Dumay:jdumay:jdumay@cloudbees.com
+Plugin-License-Name: MIT License
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/display-url-a
+ pi-plugin.git
+Plugin-ScmTag: display-url-api-2.3.9
+Plugin-ScmUrl: https://github.com/jenkinsci/display-url-api-plugin
+Plugin-GitHash: e06be0e263d6a5a0d2e96eb9c4df1b96fcfe5295
+Implementation-Build: e06be0e263d6a5a0d2e96eb9c4df1b96fcfe5295
+

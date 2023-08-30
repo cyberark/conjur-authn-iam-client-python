@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: SSH Build Agents plugin
+Specification-Version: 0.0
+Implementation-Title: SSH Build Agents plugin
+Implementation-Version: 2.916.vd17b_43357ce4
+Plugin-Class: hudson.plugins.sshslaves.PluginImpl
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: ssh-slaves
+Short-Name: ssh-slaves
+Long-Name: SSH Build Agents plugin
+Url: https://github.com/jenkinsci/ssh-slaves-plugin
+Compatible-Since-Version: 2.0.0
+Plugin-Version: 2.916.vd17b_43357ce4
+Hudson-Version: 2.387.3
+Jenkins-Version: 2.387.3
+Plugin-Dependencies: credentials:1268.v3f0d043d60e9,ssh-credentials:305.
+ v8f4381501156,trilead-api:2.84.v72119de229b_7
+Plugin-Developers: Stephen Connolly:stephenconnolly:,Kohsuke Kawaguchi:k
+ ohsuke:,Olivier Lamy:olamy:,Michael Clarke:mc1arke:,Oleg Nenashev:oleg_
+ nenashev:,Ivan Fernandez Calvo:ifernandezcalvo:
+Plugin-License-Name: MIT License
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/ssh-slaves-pl
+ ugin.git
+Plugin-ScmTag: d17b43357ce457053beedfbbb2c39a9cd596c5e3
+Plugin-ScmUrl: https://github.com/jenkinsci/ssh-slaves-plugin
+Plugin-GitHash: d17b43357ce457053beedfbbb2c39a9cd596c5e3
+Implementation-Build: d17b43357ce457053beedfbbb2c39a9cd596c5e3
+

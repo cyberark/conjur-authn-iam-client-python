@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: SSH Credentials Plugin
+Specification-Version: 0.0
+Implementation-Title: SSH Credentials Plugin
+Implementation-Version: 308.ve4497b_ccd8f4
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: ssh-credentials
+Short-Name: ssh-credentials
+Long-Name: SSH Credentials Plugin
+Url: https://github.com/jenkinsci/ssh-credentials-plugin
+Plugin-Version: 308.ve4497b_ccd8f4
+Hudson-Version: 2.387.3
+Jenkins-Version: 2.387.3
+Plugin-Dependencies: credentials:1271.v54b_1c2c6388a_,trilead-api:2.84.v
+ 72119de229b_7
+Plugin-Developers: Stephen Connolly:stephenconnolly:,Oleg Nenashev:oleg_
+ nenashev:,Matt Sicker:jvz:
+Plugin-License-Name: MIT License
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/ssh-credentia
+ ls-plugin.git
+Plugin-ScmTag: e4497bccd8f41a7b1b4e71e8409229385a2e1651
+Plugin-ScmUrl: https://github.com/jenkinsci/ssh-credentials-plugin
+Plugin-GitHash: e4497bccd8f41a7b1b4e71e8409229385a2e1651
+Implementation-Build: e4497bccd8f41a7b1b4e71e8409229385a2e1651
+

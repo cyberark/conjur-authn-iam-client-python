@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jenkins-ci.plugins</groupId>
+  <artifactId>pipeline-input-step</artifactId>
+  <version>477.v339683a_8d55e</version>
+  <packaging>hpi</packaging>
+  <name>Pipeline: Input Step</name>
+  <description>The Jenkins Plugins Parent POM Project</description>
+  <url>https://github.com/jenkinsci/pipeline-input-step-plugin</url>
+  <inceptionYear>2016</inceptionYear>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:https://github.com/jenkinsci/pipeline-input-step-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/pipeline-input-step-plugin.git</developerConnection>
+    <tag>339683a8d55e6cd45654156f275c67155bd22940</tag>
+    <url>https://github.com/jenkinsci/pipeline-input-step-plugin</url>
+  </scm>
+  <distributionManagement>
+    <repository>
+      <id>maven.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>structs</artifactId>
+      <version>324.va_f5d6774f3a_d</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-step-api</artifactId>
+      <version>639.v6eca_cd8c04a_a_</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-api</artifactId>
+      <version>1208.v0cc7c6e0da_9e</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-support</artifactId>
+      <version>839.v35e2736cfd5c</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>credentials</artifactId>
+      <version>1189.vf61b_a_5e2f62e</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jenkins-ci.tools</groupId>
+        <artifactId>maven-hpi-plugin</artifactId>
+        <version>3.47</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

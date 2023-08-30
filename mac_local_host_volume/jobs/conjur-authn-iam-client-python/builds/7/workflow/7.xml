@@ -1,0 +1,57 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<Tag plugin="workflow-support@848.v5a_383b_d14921">
+  <node class="cps.n.StepAtomNode" plugin="workflow-cps@3773.v505e0052522c">
+    <parentIds>
+      <string>6</string>
+    </parentIds>
+    <id>7</id>
+    <descriptorId>org.jenkinsci.plugins.workflow.steps.scm.GenericSCMStep</descriptorId>
+  </node>
+  <actions>
+    <cps.a.ArgumentsActionImpl plugin="workflow-cps@3773.v505e0052522c">
+      <arguments>
+        <entry>
+          <string>scm</string>
+          <org.jenkinsci.plugins.workflow.cps.UninstantiatedDescribableWithInterpolation>
+            <symbol>scmGit</symbol>
+            <arguments class="linked-hash-map">
+              <entry>
+                <string>branches</string>
+                <list>
+                  <linked-hash-map>
+                    <entry>
+                      <string>name</string>
+                      <string>CNJR-258</string>
+                    </entry>
+                  </linked-hash-map>
+                </list>
+              </entry>
+              <entry>
+                <string>extensions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>userRemoteConfigs</string>
+                <list>
+                  <linked-hash-map>
+                    <entry>
+                      <string>url</string>
+                      <string>https://github.com/cyberark/conjur-authn-iam-client-python.git</string>
+                    </entry>
+                  </linked-hash-map>
+                </list>
+              </entry>
+            </arguments>
+            <interpolatedStrings/>
+          </org.jenkinsci.plugins.workflow.cps.UninstantiatedDescribableWithInterpolation>
+        </entry>
+      </arguments>
+      <sensitiveVariables/>
+      <isUnmodifiedBySanitization>true</isUnmodifiedBySanitization>
+    </cps.a.ArgumentsActionImpl>
+    <wf.a.TimingAction plugin="workflow-api@1267.vd9b_a_ddd9eb_47">
+      <startTime>1693381543095</startTime>
+    </wf.a.TimingAction>
+    <s.a.LogStorageAction/>
+  </actions>
+</Tag>

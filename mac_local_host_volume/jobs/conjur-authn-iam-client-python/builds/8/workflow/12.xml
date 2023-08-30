@@ -1,0 +1,30 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<Tag plugin="workflow-support@848.v5a_383b_d14921">
+  <node class="cps.n.StepAtomNode" plugin="workflow-cps@3773.v505e0052522c">
+    <parentIds>
+      <string>11</string>
+    </parentIds>
+    <id>12</id>
+    <descriptorId>jenkins.plugins.git.GitStep</descriptorId>
+  </node>
+  <actions>
+    <cps.a.ArgumentsActionImpl plugin="workflow-cps@3773.v505e0052522c">
+      <arguments>
+        <entry>
+          <string>branch</string>
+          <string>CNJR-258</string>
+        </entry>
+        <entry>
+          <string>url</string>
+          <string>https://github.com/cyberark/conjur-authn-iam-client-python.git</string>
+        </entry>
+      </arguments>
+      <sensitiveVariables/>
+      <isUnmodifiedBySanitization>true</isUnmodifiedBySanitization>
+    </cps.a.ArgumentsActionImpl>
+    <wf.a.TimingAction plugin="workflow-api@1267.vd9b_a_ddd9eb_47">
+      <startTime>1693381645889</startTime>
+    </wf.a.TimingAction>
+    <s.a.LogStorageAction/>
+  </actions>
+</Tag>

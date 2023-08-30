@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: bouncycastle API Plugin
+Specification-Version: 2.29
+Implementation-Title: bouncycastle API Plugin
+Implementation-Version: 2.29
+Plugin-Class: jenkins.bouncycastle.api.BouncyCastlePlugin
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: bouncycastle-api
+Short-Name: bouncycastle-api
+Long-Name: bouncycastle API Plugin
+Url: https://github.com/jenkinsci/bouncycastle-api-plugin
+Plugin-Version: 2.29
+Hudson-Version: 2.361.4
+Jenkins-Version: 2.361.4
+Plugin-Developers: Alvaro Lobato:alvarolobato:alobato@cloudbees.com
+Support-Dynamic-Loading: true
+Plugin-License-Name: The MIT license
+Plugin-License-Url: https://www.opensource.org/licenses/mit-license.php
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/bouncycastle-
+ api-plugin.git
+Plugin-ScmTag: bouncycastle-api-2.29
+Plugin-ScmUrl: https://github.com/jenkinsci/bouncycastle-api-plugin
+Plugin-GitHash: 47afce2b158797ac394d4ae763e23dc7194b6917
+Implementation-Build: 47afce2b158797ac394d4ae763e23dc7194b6917
+

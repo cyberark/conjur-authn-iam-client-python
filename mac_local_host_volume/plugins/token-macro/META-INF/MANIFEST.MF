@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: Token Macro Plugin
+Specification-Version: 0.0
+Implementation-Title: Token Macro Plugin
+Implementation-Version: 384.vf35b_f26814ec
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: token-macro
+Short-Name: token-macro
+Long-Name: Token Macro Plugin
+Url: https://github.com/jenkinsci/token-macro-plugin
+Plugin-Version: 384.vf35b_f26814ec
+Hudson-Version: 2.375.4
+Jenkins-Version: 2.375.4
+Plugin-Dependencies: workflow-api:1215.v2b_ee3e1b_dd39;resolution:=optio
+ nal,workflow-job:1308.v58d48a_763b_31;resolution:=optional,workflow-ste
+ p-api:639.v6eca_cd8c04a_a_,structs:324.va_f5d6774f3a_d
+Plugin-Developers: Kohsuke Kawaguchi:kohsuke:kkawaguchi@cloudbees.com,Al
+ ex Earl:slide_o_mix:slide.o.mix@gmail.com
+Plugin-License-Name: The MIT License (MIT)
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/token-macro-p
+ lugin.git
+Plugin-ScmTag: f35bf26814ecfe50cd06bceb87000a66df47d765
+Plugin-ScmUrl: https://github.com/jenkinsci/token-macro-plugin
+Plugin-GitHash: f35bf26814ecfe50cd06bceb87000a66df47d765
+Implementation-Build: f35bf26814ecfe50cd06bceb87000a66df47d765
+

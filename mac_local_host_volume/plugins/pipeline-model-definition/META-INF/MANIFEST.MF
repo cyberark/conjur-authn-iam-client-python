@@ -1,0 +1,39 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: Pipeline: Declarative
+Specification-Version: 0.0
+Implementation-Title: Pipeline: Declarative
+Implementation-Version: 2.2144.v077a_d1928a_40
+Group-Id: org.jenkinsci.plugins
+Artifact-Id: pipeline-model-definition
+Short-Name: pipeline-model-definition
+Long-Name: Pipeline: Declarative
+Url: https://github.com/jenkinsci/pipeline-model-definition-plugin
+Compatible-Since-Version: 1.6.0
+Plugin-Version: 2.2144.v077a_d1928a_40
+Hudson-Version: 2.387.3
+Jenkins-Version: 2.387.3
+Plugin-Dependencies: pipeline-groovy-lib:656.va_a_ceeb_6ffb_f7,workflow-
+ api:1213.v646def1087f9,workflow-basic-steps:1017.vb_45b_302f0cea_,workf
+ low-cps:3691.v28b_14c465a_b_b_,workflow-durable-task-step:1247.v7f9dfea
+ _b_4fd0,workflow-multibranch:746.v05814d19c001,workflow-scm-step:408.v7
+ d5b_135a_b_d49,workflow-support:839.v35e2736cfd5c,credentials-binding:6
+ 04.vb_64480b_c56ca_,credentials:1254.vb_96f366e7b_a_d,git-client:4.3.0,
+ mailer:457.v3f72cb_e015e5,pipeline-input-step:468.va_5db_051498a_4,pipe
+ line-stage-step:305.ve96d0205c1c6,scm-api:672.v64378a_b_20c60,structs:3
+ 24.va_f5d6774f3a_d,pipeline-model-api:2.2144.v077a_d1928a_40,pipeline-m
+ odel-extensions:2.2144.v077a_d1928a_40,pipeline-stage-tags-metadata:2.2
+ 144.v077a_d1928a_40
+Plugin-Developers: Andrew Bayer:abayer:
+Plugin-License-Name: MIT
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/pipeline-mode
+ l-definition-plugin.git
+Plugin-ScmTag: 077ad1928a4012780319d9cfc1a40fb0cb510290
+Plugin-ScmUrl: https://github.com/jenkinsci/pipeline-model-definition-pl
+ ugin
+Plugin-GitHash: 077ad1928a4012780319d9cfc1a40fb0cb510290
+Plugin-Module: pipeline-model-definition
+Implementation-Build: 077ad1928a4012780319d9cfc1a40fb0cb510290
+

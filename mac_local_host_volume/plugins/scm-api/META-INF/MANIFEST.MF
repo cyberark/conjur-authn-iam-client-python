@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: SCM API Plugin
+Specification-Version: 0.0
+Implementation-Title: SCM API Plugin
+Implementation-Version: 676.v886669a_199a_a_
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: scm-api
+Short-Name: scm-api
+Long-Name: SCM API Plugin
+Url: https://github.com/jenkinsci/scm-api-plugin/blob/master/docs/consum
+ er.adoc
+Compatible-Since-Version: 2.0.0
+Plugin-Version: 676.v886669a_199a_a_
+Hudson-Version: 2.361.4
+Jenkins-Version: 2.361.4
+Plugin-Dependencies: structs:324.va_f5d6774f3a_d
+Plugin-Developers: 
+Plugin-License-Name: The MIT license
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/scm-api-plugi
+ n.git
+Plugin-ScmTag: 886669a199aa30665f70efe21abb5a3f49fe4b04
+Plugin-ScmUrl: https://github.com/jenkinsci/scm-api-plugin
+Plugin-GitHash: 886669a199aa30665f70efe21abb5a3f49fe4b04
+Implementation-Build: 886669a199aa30665f70efe21abb5a3f49fe4b04
+

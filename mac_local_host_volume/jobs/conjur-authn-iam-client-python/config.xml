@@ -1,0 +1,36 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1341.vd9fa_65f771dd">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2144.v077a_d1928a_40">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3773.v505e0052522c">
+    <script>pipeline{
+    agent any
+    stages{
+        stage(&quot;checkout&quot;){
+            steps{
+                checkout scmGit(branches: [[name: &apos;CNJR-258&apos;]], extensions: [], userRemoteConfigs: [[url: &apos;https://github.com/cyberark/conjur-authn-iam-client-python.git&apos;]])
+            }
+        }
+        stage(&quot;build&quot;){
+            steps{
+                git branch: &apos;CNJR-258&apos;, url: &apos;https://github.com/cyberark/conjur-authn-iam-client-python.git&apos;
+                sh &apos;python3 -m unittest&apos;
+            }
+        }
+    }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: JUnit Plugin
+Specification-Version: 0.0
+Implementation-Title: JUnit Plugin
+Implementation-Version: 1217.v4297208a_a_b_ce
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: junit
+Short-Name: junit
+Long-Name: JUnit Plugin
+Url: https://github.com/jenkinsci/junit-plugin
+Plugin-Version: 1217.v4297208a_a_b_ce
+Hudson-Version: 2.387.1
+Jenkins-Version: 2.387.1
+Plugin-Dependencies: bootstrap5-api:5.2.3-1,checks-api:2.0.0,echarts-api
+ :5.4.0-4,ionicons-api:56.v1b_1c8c49374e,plugin-util-api:3.2.1,workflow-
+ api:1213.v646def1087f9,workflow-step-api:639.v6eca_cd8c04a_a_,display-u
+ rl-api:2.3.7,jackson2-api:2.15.1-344.v6eb_55303dc3e,script-security:125
+ 1.vfe552ed55f8d
+Plugin-Developers: 
+Plugin-License-Name: MIT
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/junit-plugin.
+ git
+Plugin-ScmTag: 4297208aabce82ea17ad6e9e07a82fc4fe52d375
+Plugin-ScmUrl: https://github.com/jenkinsci/junit-plugin
+Plugin-GitHash: 4297208aabce82ea17ad6e9e07a82fc4fe52d375
+Implementation-Build: 4297208aabce82ea17ad6e9e07a82fc4fe52d375
+

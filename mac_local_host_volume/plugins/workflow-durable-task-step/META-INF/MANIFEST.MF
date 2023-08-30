@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: Pipeline: Nodes and Processes
+Specification-Version: 0.0
+Implementation-Title: Pipeline: Nodes and Processes
+Implementation-Version: 1289.v4d3e7b_01546b_
+Group-Id: org.jenkins-ci.plugins.workflow
+Artifact-Id: workflow-durable-task-step
+Short-Name: workflow-durable-task-step
+Long-Name: Pipeline: Nodes and Processes
+Url: https://github.com/jenkinsci/workflow-durable-task-step-plugin
+Compatible-Since-Version: 2.40
+Plugin-Version: 1289.v4d3e7b_01546b_
+Hudson-Version: 2.361.4
+Jenkins-Version: 2.361.4
+Plugin-Dependencies: workflow-api:1248.v4b_91043341d2,workflow-step-api:
+ 639.v6eca_cd8c04a_a_,workflow-support:839.v35e2736cfd5c,durable-task:51
+ 3.vc48a_a_075a_d93,scm-api:672.v64378a_b_20c60,script-security:1244.ve4
+ 63715a_f89c,structs:324.va_f5d6774f3a_d
+Plugin-Developers: 
+Plugin-License-Name: MIT License
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/workflow-dura
+ ble-task-step-plugin.git
+Plugin-ScmTag: 4d3e7b01546b56721a26b69bb2340e4a62646f87
+Plugin-ScmUrl: https://github.com/jenkinsci/workflow-durable-task-step-p
+ lugin
+Plugin-GitHash: 4d3e7b01546b56721a26b69bb2340e4a62646f87
+Implementation-Build: 4d3e7b01546b56721a26b69bb2340e4a62646f87
+

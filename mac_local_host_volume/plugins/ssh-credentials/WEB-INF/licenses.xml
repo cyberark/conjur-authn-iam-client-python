@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<l:dependencies xmlns:l='licenses' groupId='org.jenkins-ci.plugins' artifactId='ssh-credentials' version='308.ve4497b_ccd8f4'><l:dependency name='SSH Credentials Plugin' groupId='org.jenkins-ci.plugins' artifactId='ssh-credentials' version='308.ve4497b_ccd8f4' url='https://github.com/jenkinsci/ssh-credentials-plugin'><l:description>Allows storage of SSH credentials in Jenkins</l:description><l:license name='MIT License' url='https://opensource.org/licenses/MIT'/></l:dependency></l:dependencies>

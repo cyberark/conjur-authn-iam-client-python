@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.0
+Build-Jdk-Spec: 11
+Specification-Title: Credentials Binding Plugin
+Specification-Version: 0.0
+Implementation-Title: Credentials Binding Plugin
+Implementation-Version: 631.v861c06d062b_4
+Group-Id: org.jenkins-ci.plugins
+Artifact-Id: credentials-binding
+Short-Name: credentials-binding
+Long-Name: Credentials Binding Plugin
+Url: https://github.com/jenkinsci/credentials-binding-plugin
+Plugin-Version: 631.v861c06d062b_4
+Hudson-Version: 2.387.3
+Jenkins-Version: 2.387.3
+Plugin-Dependencies: workflow-step-api:639.v6eca_cd8c04a_a_,credentials:
+ 1254.vb_96f366e7b_a_d,plain-credentials:143.v1b_df8b_d3b_e48,ssh-creden
+ tials:305.v8f4381501156,structs:324.va_f5d6774f3a_d
+Plugin-Developers: 
+Plugin-License-Name: MIT
+Plugin-License-Url: https://opensource.org/licenses/MIT
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/credentials-b
+ inding-plugin
+Plugin-ScmTag: 861c06d062b44473ec93e6e4fcfdc9cd8c1858e8
+Plugin-ScmUrl: https://github.com/jenkinsci/credentials-binding-plugin
+Plugin-GitHash: 861c06d062b44473ec93e6e4fcfdc9cd8c1858e8
+Implementation-Build: 861c06d062b44473ec93e6e4fcfdc9cd8c1858e8
+
