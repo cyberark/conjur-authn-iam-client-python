@@ -1,0 +1,21 @@
+# Use an official Python runtime as a parent image
+FROM python:3.10
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the requirements file into the container and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --user conjur-client
+RUN echo "Building the Docker image now 1..."
+
+# Copy the entire application directory into the container
+COPY . .
+
+
+RUN pip install --upgrade requests
+RUN pip3 install --user .
+RUN echo "Building the Docker image now 2..."
+
+CMD ["python3", "integrationtestcases.py"]

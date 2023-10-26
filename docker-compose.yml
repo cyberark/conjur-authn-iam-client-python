@@ -1,0 +1,31 @@
+version: '3'
+services:
+  client:
+    image: cyberark/conjur-cli:5
+    entrypoint: sleep
+    command: infinity
+    environment:
+      CONJUR_APPLIANCE_URL:
+      CONJUR_ACCOUNT:
+      CONJUR_AUTHN_LOGIN:
+      CONJUR_AUTHN_API_KEY:
+      CONJUR_SSL_CERTIFICATE:
+    volumes:
+      - ./conf/policy:/policy
+
+  conjur_aws:
+    build:
+      context: .
+      dockerfile: Dockerfile.aws
+    environment:
+      CONJUR_APPLIANCE_URL:
+      AUTHN_IAM_SERVICE_ID:
+      CONJUR_AUTHN_LOGIN:
+      CONJUR_ACCOUNT:
+      CONJUR_SSL_CERTIFICATE:
+      CONJUR_CERT_FILE:
+      TARGET:
+    working_dir: /app
+    # command: python3 testing.py
+
+
