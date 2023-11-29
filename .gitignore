@@ -1,0 +1,11 @@
+__pycache__
+htmlcov
+.coverage
+build
+admin_data
+*.pyc
+*.xml
+data_key
+coverage.xml
+test/*.pyc
+.DS_store

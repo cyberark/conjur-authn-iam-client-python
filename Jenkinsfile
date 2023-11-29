@@ -78,11 +78,32 @@ pipeline {
             sh 'echo "Hello World"'
         }
     }
+
+    stage('Install Dependencies') {
+    steps {
+            sh 'pip install -r requirements.txt'
+        }
+    }
+    stage('Run Tests') {
+        steps {
+            sh 'python3 -m unittest test/test_*.py'
+        }
+    }
+    stage('Generate Coverage Report') {
+        steps {
+
+            sh 'coverage run -m unittest test/test_*.py'
+            sh 'coverage report -m test/test_*.py'
+        }
+    }
     stage('Stage on AWS Instance') {
       steps {
         script {
           // Run script from repo on an AWS instance managed by infrapool
           infrapool.agentSh 'echo "Hello World"'
+          infrapool.agentSh './bin/test oss'
+          infrapool.agentSh './bin/test enterprise'
+          infrapool.agentSh './bin/test cloud'
         }
       }
     }
