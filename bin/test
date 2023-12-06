@@ -153,10 +153,10 @@ function runIAMAWS() {
     esac
 
   echo ">> Planning and applying aws  manifest"
-    docker-compose -f docker-compose.yml build conjur_aws
-    docker-compose -f docker-compose.yml run conjur_aws
+    docker compose -f docker-compose.yml build conjur_aws
+    docker compose -f docker-compose.yml run conjur_aws
 
-  docker-compose rm --force \
+  docker compose rm --force \
     --stop \
     -v \
     conjur_aws

@@ -1,7 +1,7 @@
 version: '3'
 services:
   conjur-server:
-    image: registry.tld/conjur-appliance:5.12.3
+    image: registry2.itci.conjur.net/conjur-appliance:5.16.17
     environment:
       CONJUR_AUTHENTICATORS: authn-iam/prod
     security_opt:
