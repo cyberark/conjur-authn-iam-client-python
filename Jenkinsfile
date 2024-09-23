@@ -97,6 +97,9 @@ pipeline {
         }
     }
     stage('Stage on AWS Instance') {
+      environment {
+        INFRAPOOL_REGISTRY_URL = "registry.tld"
+      }
       steps {
         script {
           // Run script from repo on an AWS instance managed by infrapool
