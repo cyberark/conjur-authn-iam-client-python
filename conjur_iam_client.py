@@ -1,8 +1,11 @@
 import sys, datetime, hashlib, hmac, json, os
 import requests # pip install requests
-from conjur import Client
 from datetime import timedelta
 import urllib.parse
+from conjur_api import Client
+from conjur_api.models import ConjurConnectionInfo, CredentialsData, SslVerificationMode
+from conjur_api.providers import AuthnAuthenticationStrategy, SimpleCredentialsProvider
+from importlib.metadata import version
 
 # ************* REQUEST VALUES *************
 AWS_METADATA_URL = "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
@@ -12,7 +15,6 @@ SERVICE = 'sts'
 HOST = 'sts.amazonaws.com'
 ENDPOINT = 'https://sts.amazonaws.com'
 REQUEST_PARAMETERS = 'Action=GetCallerIdentity&Version=2011-06-15'
-
 
 class ConjurIAMAuthnException(Exception):
     def __init__(self):
@@ -51,21 +53,47 @@ def get_aws_region():
     return "us-east-1"
 
 def get_iam_role_name():
-    r = requests.get(AWS_METADATA_URL)
+    token = get_metadata_token()
+    headers = {}
+    if token:
+       headers = {'X-aws-ec2-metadata-token': token} 
+    r = requests.get(AWS_METADATA_URL, headers=headers)
     return r.text
 
-def get_iam_role_metadata(role_name):
-    r = requests.get(AWS_METADATA_URL + role_name)
-    if r.status_code == 404:
-        raise IAMRoleNotAvailableException()
+def get_metadata_token():
+    """Request a session token for IMDSv2"""
+    url = 'http://169.254.169.254/latest/api/token'
+    headers = {'X-aws-ec2-metadata-token-ttl-seconds': '21600'}  # TTL for the token
+    try:
+        response = requests.put(url, headers=headers, timeout=2)
+        if response.status_code == 200:
+            return response.text 
+        else:
+            return None
+    except requests.exceptions.RequestException:
+        return None
 
-    json_dict = json.loads(r.text)
+def get_iam_role_metadata(role_name, token=None):
+    headers = {}
+    if token:
+       headers = {'X-aws-ec2-metadata-token': token} 
+    
+    try:
+        r = requests.get(AWS_METADATA_URL + role_name, headers=headers)
+        if r.status_code == 404:
+            raise IAMRoleNotAvailableException()
+        elif r.status_code != 200:
+            raise Exception(f"Error retrieving IAM role metadata: {r.status_code}")
 
-    access_key_id = json_dict["AccessKeyId"]
-    secret_access_key = json_dict["SecretAccessKey"]
-    token = json_dict["Token"]
+        json_dict = json.loads(r.text)
 
-    return access_key_id, secret_access_key, token
+        access_key_id = json_dict["AccessKeyId"]
+        secret_access_key = json_dict["SecretAccessKey"]
+        token = json_dict["Token"]
+
+        return access_key_id, secret_access_key, token
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Failed to get IAM role metadata: {str(e)}")
 
 def create_canonical_request(amzdate, token, signed_headers, payload_hash):
     # ************* TASK 1: CREATE A CANONICAL REQUEST *************
@@ -107,9 +135,11 @@ def create_canonical_request(amzdate, token, signed_headers, payload_hash):
 def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=None, token=None):
     if iam_role_name is None:
         iam_role_name = get_iam_role_name()
+
+    metadata_token = get_metadata_token()
     
     if access_key is None and secret_key is None and token is None:
-        access_key, secret_key, token = get_iam_role_metadata(iam_role_name)
+        access_key, secret_key, token = get_iam_role_metadata(iam_role_name, metadata_token)
 
     region = get_aws_region()
 
@@ -118,7 +148,7 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
         sys.exit()
 
     # Create a date for headers and the credential string
-    t = datetime.datetime.utcnow()
+    t = datetime.datetime.now(datetime.timezone.utc)
     amzdate = t.strftime('%Y%m%dT%H%M%SZ')
     datestamp = t.strftime('%Y%m%d') # Date w/o time, used in credential scope
 
@@ -194,14 +224,31 @@ An issue/enhancement has ben created on the conjur-python3-api github to address
 def create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_file, iam_role_name=None, access_key=None, secret_key=None, token=None, ssl_verify=True):
     appliance_url = appliance_url.rstrip("/")
     # create our client with a placeholder api key
-    client = Client(url=appliance_url, account=account, login_id=host_id, api_key="placeholder", ca_bundle=cert_file, ssl_verify=ssl_verify)
+    connection_info = ConjurConnectionInfo(conjur_url=appliance_url,account=account,cert_file=cert_file)
+    credentials = CredentialsData(username=host_id, api_key="placeholder", machine=appliance_url)
+    credentials_provider = SimpleCredentialsProvider()
+    credentials_provider.save(credentials)
+    del credentials
+    authn_provider = AuthnAuthenticationStrategy(credentials_provider)
+    ssl_verification_mode=SslVerificationMode.CA_BUNDLE
+
+    if cert_file is None:
+       ssl_verification_mode=SslVerificationMode.INSECURE
+
+    client = Client(connection_info,
+                authn_strategy=authn_provider,
+                ssl_verification_mode=ssl_verification_mode, async_mode=False)
+
+    # telemetry changes
+    #latest_version = Client.get_latest_version(os.path.join(os.path.dirname(__file__),'CHANGELOG.md'))
+    #client.set_top_source_name("cour_iam_client/"+latest_version)
 
     # now obtain the iam session_token
     session_token = get_conjur_iam_session_token(appliance_url, account, service_id, host_id, cert_file, iam_role_name, access_key, secret_key, token, ssl_verify)
  
     # override the _api_token with the token created in get_conjur_iam_session_token
     client._api._api_token = session_token
-    client._api.api_token_expiration = datetime.datetime.now() + timedelta(minutes=client._api.API_TOKEN_DURATION)
+    client._api.api_token_expiration = datetime.datetime.now() + timedelta(minutes=8)
 
     return client
 
@@ -222,5 +269,3 @@ def create_conjur_iam_client_from_env(iam_role_name=None, access_key=None, secre
 # Examples of using methods:
 # get_conjur_iam_session_token(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'], os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
 # create_conjur_iam_client(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'], os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
-
-

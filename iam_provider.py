@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from conjur import Client
+from conjur_api import Client
 from conjur_iam_client import create_conjur_iam_client_from_env
 import sys
 
