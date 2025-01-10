@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from conjur import Client
+from conjur_api import Client
 from conjur_iam_client import create_conjur_iam_client_from_env
 import sys
 
@@ -20,4 +20,3 @@ if __name__ == '__main__':
         write_and_flush(sys.stderr, '{} could not be retrieved'.format(variable_id))
         sys.exit(1)
     write_and_flush(sys.stdout, value.decode('utf-8'))
-

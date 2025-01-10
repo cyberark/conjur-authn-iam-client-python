@@ -1,4 +1,5 @@
 pytest==6.2.5
 requests==2.26.0
-conjur==7.0.1
+conjur-api>=0.1.2
 coverage
+async-timeout>=4.0.3

@@ -39,17 +39,17 @@ class MockMergeDictionariesnew(MagicMock):
 class TestLearnTest(unittest.TestCase):
 
     def test_get_aws_region(self):
-        r = conjur_iam_client.get_aws_region()
-        self.assertEqual("us-east-1", r)
+        res = conjur_iam_client.get_aws_region()
+        self.assertEqual("us-east-1", res)
 
     def test_valid_aws_account_number(self):
         validate_account_name = valid_aws_account_number("cucumber")
         self.assertEqual(False, validate_account_name)
 
     def test_string(self):
-        a = 'some'
-        b = 'some'
-        self.assertEqual(a, b)
+        abc = 'some'
+        bcd = 'some'
+        self.assertEqual(abc, bcd)
 
     def test_get_signature_key(self):
         abc = get_signature_key("1756786889", "1/2/2002", "us-east", "abce")
@@ -58,15 +58,11 @@ class TestLearnTest(unittest.TestCase):
     @patch('conjur_iam_client.create_conjur_iam_client')
     @patch.dict(os.environ, {"CONJUR_APPLIANCE_URL": "http://conjur.com", "CONJUR_ACCOUNT": "CONJUR_ACCOUNT","AUTHN_IAM_SERVICE_ID": "AUTHN_IAM_SERVICE_ID", "CONJUR_AUTHN_LOGIN": "CONJUR_AUTHN_LOGIN"})
     def test_create_conjur_iam_client_from_env(self, mock_create_conjur_iam_client):
-            mock_response = MagicMock()
-            mock_create_conjur_iam_client.return_value = "response body"
-            result = "response body"
-            create_conjur_iam_client_from_env(None, None, None, None, True)
-            self.assertEqual("response body", result)
-
-    def test_get_signature_key(self):
-        result= get_signature_key("key", "dateStamp", "regionName", "serviceName")
-        self.assertNotEqual(MockMergeDictionaries.RESPONSE, result)
+        mock_response = MagicMock()
+        mock_create_conjur_iam_client.return_value = "response body"
+        result = "response body"
+        create_conjur_iam_client_from_env(None, None, None, None, True)
+        self.assertEqual("response body", result)
 
     @patch('conjur_iam_client.create_conjur_iam_api_key')
     def test_get_conjur_iam_session_token(self, mock_create_conjur_iam_api_key):
