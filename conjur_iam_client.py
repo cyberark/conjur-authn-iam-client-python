@@ -18,15 +18,15 @@ REQUEST_PARAMETERS = 'Action=GetCallerIdentity&Version=2011-06-15'
 
 class ConjurIAMAuthnException(Exception):
     def __init__(self):
-        Exception.__init__(self,"Conjur IAM authentication failed with 401 - Unauthorized. Check conjur logs for more information") 
+        Exception.__init__(self,"Conjur IAM authentication failed with 401 - Unauthorized. Check conjur logs for more information")
 
 class IAMRoleNotAvailableException(Exception):
     def __init__(self):
-        Exception.__init__(self,"Most likely the ec2 instance is configured with no or an incorrect iam role") 
+        Exception.__init__(self,"Most likely the ec2 instance is configured with no or an incorrect iam role")
 
 class InvalidAwsAccountIdException(Exception):
     def __init__(self):
-        Exception.__init__(self,"The AWS Account ID specified in the CONJUR_AUTHN_LOGIN is invalid and must be a 12 digit number") 
+        Exception.__init__(self,"The AWS Account ID specified in the CONJUR_AUTHN_LOGIN is invalid and must be a 12 digit number")
 
 def valid_aws_account_number(host_id):
     parts = host_id.split("/")
@@ -41,12 +41,12 @@ def sign(key, msg):
     return hmac.new(key, msg.encode('utf-8'), hashlib.sha256).digest()
 
 
-def get_signature_key(key, dateStamp, regionName, serviceName):
-    kDate = sign(('AWS4' + key).encode('utf-8'), dateStamp)
-    kRegion = sign(kDate, regionName)
-    kService = sign(kRegion, serviceName)
-    kSigning = sign(kService, 'aws4_request')
-    return kSigning
+def get_signature_key(key, date_stamp, region_name, service_name):
+    k_date = sign(('AWS4' + key).encode('utf-8'), date_stamp)
+    k_region = sign(k_date, region_name)
+    k_service = sign(k_region, service_name)
+    k_signing = sign(k_service, 'aws4_request')
+    return k_signing
 
 def get_aws_region():
     # return requests.get(AWS_AVAILABILITY_ZONE).text[:-1]
@@ -56,9 +56,9 @@ def get_iam_role_name():
     token = get_metadata_token()
     headers = {}
     if token:
-       headers = {'X-aws-ec2-metadata-token': token} 
-    r = requests.get(AWS_METADATA_URL, headers=headers)
-    return r.text
+        headers = {'X-aws-ec2-metadata-token': token}
+    res = requests.get(AWS_METADATA_URL, headers=headers)
+    return res.text
 
 def get_metadata_token():
     """Request a session token for IMDSv2"""
@@ -67,7 +67,7 @@ def get_metadata_token():
     try:
         response = requests.put(url, headers=headers, timeout=2)
         if response.status_code == 200:
-            return response.text 
+            return response.text
         else:
             return None
     except requests.exceptions.RequestException:
@@ -76,16 +76,16 @@ def get_metadata_token():
 def get_iam_role_metadata(role_name, token=None):
     headers = {}
     if token:
-       headers = {'X-aws-ec2-metadata-token': token} 
-    
+        headers = {'X-aws-ec2-metadata-token': token} 
+
     try:
-        r = requests.get(AWS_METADATA_URL + role_name, headers=headers)
-        if r.status_code == 404:
+        res = requests.get(AWS_METADATA_URL + role_name, headers=headers)
+        if res.status_code == 404:
             raise IAMRoleNotAvailableException()
-        elif r.status_code != 200:
+        elif res.status_code != 200:
             raise Exception(f"Error retrieving IAM role metadata: {r.status_code}")
 
-        json_dict = json.loads(r.text)
+        json_dict = json.loads(res.text)
 
         access_key_id = json_dict["AccessKeyId"]
         secret_access_key = json_dict["SecretAccessKey"]
@@ -137,7 +137,7 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
         iam_role_name = get_iam_role_name()
 
     metadata_token = get_metadata_token()
-    
+
     if access_key is None and secret_key is None and token is None:
         access_key, secret_key, token = get_iam_role_metadata(iam_role_name, metadata_token)
 
@@ -201,7 +201,7 @@ def get_conjur_iam_session_token(appliance_url, account, service_id, host_id, ce
     appliance_url = appliance_url.rstrip("/")
     url = "{}/authn-iam/{}/{}/{}/authenticate".format(appliance_url, service_id, account, urllib.parse.quote(host_id, safe=''))
     iam_api_key = create_conjur_iam_api_key(iam_role_name, access_key, secret_key, token)
-    
+
     # If cert file is not provided then assume conjur is using valid certificate
     if cert_file == None:
         cert_file = True
@@ -209,7 +209,7 @@ def get_conjur_iam_session_token(appliance_url, account, service_id, host_id, ce
     # If ssl_verify is explicitly false then ignore ssl certificate even if cert_file is set
     if not ssl_verify:
         cert_file = False
-    
+   
     r = requests.post(url=url,data=iam_api_key,verify=cert_file)
 
     if r.status_code == 401:
@@ -233,7 +233,7 @@ def create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_f
     ssl_verification_mode=SslVerificationMode.CA_BUNDLE
 
     if cert_file is None:
-       ssl_verification_mode=SslVerificationMode.INSECURE
+        ssl_verification_mode=SslVerificationMode.INSECURE
 
     client = Client(connection_info,
                 authn_strategy=authn_provider,
@@ -245,7 +245,7 @@ def create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_f
 
     # now obtain the iam session_token
     session_token = get_conjur_iam_session_token(appliance_url, account, service_id, host_id, cert_file, iam_role_name, access_key, secret_key, token, ssl_verify)
- 
+
     # override the _api_token with the token created in get_conjur_iam_session_token
     client._api._api_token = session_token
     client._api.api_token_expiration = datetime.datetime.now() + timedelta(minutes=8)

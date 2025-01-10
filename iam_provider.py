@@ -20,4 +20,3 @@ if __name__ == '__main__':
         write_and_flush(sys.stderr, '{} could not be retrieved'.format(variable_id))
         sys.exit(1)
     write_and_flush(sys.stdout, value.decode('utf-8'))
-
