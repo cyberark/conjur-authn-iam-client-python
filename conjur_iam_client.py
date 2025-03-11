@@ -1,11 +1,18 @@
-import sys, datetime, hashlib, hmac, json, os
-import requests # pip install requests
-from datetime import timedelta
+import datetime
+import hashlib
+import hmac
+import json
+import os
+import sys
 import urllib.parse
+from datetime import timedelta
+
+import requests  # pip install requests
 from conjur_api import Client
-from conjur_api.models import ConjurConnectionInfo, CredentialsData, SslVerificationMode
-from conjur_api.providers import AuthnAuthenticationStrategy, SimpleCredentialsProvider
-from importlib.metadata import version
+from conjur_api.models import (ConjurConnectionInfo, CredentialsData,
+                               SslVerificationMode)
+from conjur_api.providers import (AuthnAuthenticationStrategy,
+                                  SimpleCredentialsProvider)
 
 # ************* REQUEST VALUES *************
 AWS_METADATA_URL = "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
@@ -18,15 +25,24 @@ REQUEST_PARAMETERS = 'Action=GetCallerIdentity&Version=2011-06-15'
 
 class ConjurIAMAuthnException(Exception):
     def __init__(self):
-        Exception.__init__(self,"Conjur IAM authentication failed with 401 - Unauthorized. Check conjur logs for more information")
+        Exception.__init__(
+            self,
+            "Conjur IAM authentication failed with 401 - Unauthorized. Check conjur logs for more information"
+        )
 
 class IAMRoleNotAvailableException(Exception):
     def __init__(self):
-        Exception.__init__(self,"Most likely the ec2 instance is configured with no or an incorrect iam role")
+        Exception.__init__(
+            self,
+            "Most likely the ec2 instance is configured with no or an incorrect iam role"
+        )
 
 class InvalidAwsAccountIdException(Exception):
     def __init__(self):
-        Exception.__init__(self,"The AWS Account ID specified in the CONJUR_AUTHN_LOGIN is invalid and must be a 12 digit number")
+        Exception.__init__(
+            self,
+            "The AWS Account ID specified in the CONJUR_AUTHN_LOGIN is invalid and must be a 12 digit number"
+        )
 
 def valid_aws_account_number(host_id):
     parts = host_id.split("/")
@@ -57,7 +73,7 @@ def get_iam_role_name():
     headers = {}
     if token:
         headers = {'X-aws-ec2-metadata-token': token}
-    res = requests.get(AWS_METADATA_URL, headers=headers)
+    res = requests.get(AWS_METADATA_URL, headers=headers, timeout=10)
     return res.text
 
 def get_metadata_token():
@@ -68,22 +84,23 @@ def get_metadata_token():
         response = requests.put(url, headers=headers, timeout=2)
         if response.status_code == 200:
             return response.text
-        else:
-            return None
+
+        return None
     except requests.exceptions.RequestException:
         return None
 
 def get_iam_role_metadata(role_name, token=None):
     headers = {}
     if token:
-        headers = {'X-aws-ec2-metadata-token': token} 
+        headers = {'X-aws-ec2-metadata-token': token}
 
     try:
-        res = requests.get(AWS_METADATA_URL + role_name, headers=headers)
+        res = requests.get(AWS_METADATA_URL + role_name, headers=headers, timeout=10)
         if res.status_code == 404:
             raise IAMRoleNotAvailableException()
-        elif res.status_code != 200:
-            raise Exception(f"Error retrieving IAM role metadata: {r.status_code}")
+
+        if res.status_code != 200:
+            raise Exception(f"Error retrieving IAM role metadata: {res.status_code}")
 
         json_dict = json.loads(res.text)
 
@@ -92,8 +109,8 @@ def get_iam_role_metadata(role_name, token=None):
         token = json_dict["Token"]
 
         return access_key_id, secret_access_key, token
-    except requests.exceptions.RequestException as e:
-        raise Exception(f"Failed to get IAM role metadata: {str(e)}")
+    except requests.exceptions.RequestException as err:
+        raise Exception(f"Failed to get IAM role metadata: {str(err)}") from err
 
 def create_canonical_request(amzdate, token, signed_headers, payload_hash):
     # ************* TASK 1: CREATE A CANONICAL REQUEST *************
@@ -118,7 +135,8 @@ def create_canonical_request(amzdate, token, signed_headers, payload_hash):
     # Step 5: Create the canonical headers and signed headers. Header names
     # must be trimmed and lowercase, and sorted in code point order from
     # low to high. Note that there is a trailing \n.
-    canonical_headers = 'host:' + HOST + '\n' + 'x-amz-content-sha256:' + payload_hash + '\n' + 'x-amz-date:' + amzdate + '\n' + 'x-amz-security-token:' + token + '\n'
+    canonical_headers = 'host:' + HOST + '\n' + 'x-amz-content-sha256:' + payload_hash + '\n' + \
+        'x-amz-date:' + amzdate + '\n' + 'x-amz-security-token:' + token + '\n'
 
     # Step 6: Create the list of signed headers. This lists the headers
     # in the canonical_headers list, delimited with ";" and in alpha order.
@@ -128,7 +146,8 @@ def create_canonical_request(amzdate, token, signed_headers, payload_hash):
     # signed_headers = 'host;x-amz-content-sha256;x-amz-date;x-amz-security-token'
 
     # Step 7: Combine elements to create canonical request
-    canonical_request = METHOD + '\n' + canonical_uri + '\n' + canonical_querystring + '\n' + canonical_headers + '\n' + signed_headers + '\n' + payload_hash
+    canonical_request = METHOD + '\n' + canonical_uri + '\n' + canonical_querystring + '\n' + \
+        canonical_headers + '\n' + signed_headers + '\n' + payload_hash
 
     return canonical_request
 
@@ -148,9 +167,9 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
         sys.exit()
 
     # Create a date for headers and the credential string
-    t = datetime.datetime.now(datetime.timezone.utc)
-    amzdate = t.strftime('%Y%m%dT%H%M%SZ')
-    datestamp = t.strftime('%Y%m%d') # Date w/o time, used in credential scope
+    date = datetime.datetime.now(datetime.timezone.utc)
+    amzdate = date.strftime('%Y%m%dT%H%M%SZ')
+    datestamp = date.strftime('%Y%m%d') # Date w/o time, used in credential scope
 
     # ************* TASK 1: CREATE A CANONICAL REQUEST *************
     signed_headers = 'host;x-amz-content-sha256;x-amz-date;x-amz-security-token'
@@ -162,7 +181,8 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
     # SHA-256 (recommended)
     algorithm = 'AWS4-HMAC-SHA256'
     credential_scope = datestamp + '/' + region + '/' + SERVICE + '/' + 'aws4_request'
-    string_to_sign = algorithm + '\n' + amzdate + '\n' + credential_scope + '\n' + hashlib.sha256(canonical_request.encode('utf-8')).hexdigest()
+    string_to_sign = algorithm + '\n' + amzdate + '\n' + credential_scope + \
+        '\n' + hashlib.sha256(canonical_request.encode('utf-8')).hexdigest()
 
     # ************* TASK 3: CALCULATE THE SIGNATURE *************
     # Create the signing key using the function defined above.
@@ -175,7 +195,8 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
     # The signing information can be either in a query string value or in
     # a header named Authorization. This code shows how to use a header.
     # Create authorization header and add to request headers
-    authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' + 'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
+    authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' \
+        + 'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
 
     # The request can include any headers, but MUST include "host", "x-amz-date",
     # and (for this scenario) "Authorization". "host" and "x-amz-date" must
@@ -192,36 +213,37 @@ def create_conjur_iam_api_key(iam_role_name=None, access_key=None, secret_key=No
     }
 
     # ************* SEND THE REQUEST *************
-    return '{}'.format(headers).replace("'", '"')
+    return f'{headers}'.replace("'", '"')
 
-def get_conjur_iam_session_token(appliance_url, account, service_id, host_id, cert_file, iam_role_name=None, access_key=None, secret_key=None, token=None, ssl_verify=True):
+def get_conjur_iam_session_token(appliance_url, account, service_id, host_id, cert_file,
+                                 iam_role_name=None, access_key=None, secret_key=None, token=None, ssl_verify=True):
     if not valid_aws_account_number(host_id):
         raise InvalidAwsAccountIdException()
 
     appliance_url = appliance_url.rstrip("/")
-    url = "{}/authn-iam/{}/{}/{}/authenticate".format(appliance_url, service_id, account, urllib.parse.quote(host_id, safe=''))
+    url = f"{appliance_url}/authn-iam/{service_id}/{account}/{urllib.parse.quote(host_id, safe='')}/authenticate"
     iam_api_key = create_conjur_iam_api_key(iam_role_name, access_key, secret_key, token)
 
     # If cert file is not provided then assume conjur is using valid certificate
-    if cert_file == None:
+    if cert_file is None:
         cert_file = True
 
     # If ssl_verify is explicitly false then ignore ssl certificate even if cert_file is set
     if not ssl_verify:
         cert_file = False
-   
-    r = requests.post(url=url,data=iam_api_key,verify=cert_file)
 
-    if r.status_code == 401:
+    res = requests.post(url=url,data=iam_api_key,verify=cert_file,timeout=10)
+
+    if res.status_code == 401:
         raise ConjurIAMAuthnException()
-    return r.text
+    return res.text
 
-"""
-If using IAM roles with conjur via the python3 api client use this function.
-The client will not support auto-refreshing of token when using iam authentication so it is recommended to call this method everytime you make a client request.
-An issue/enhancement has ben created on the conjur-python3-api github to address this issue however this is a work around for the time being.
-"""
-def create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_file, iam_role_name=None, access_key=None, secret_key=None, token=None, ssl_verify=True):
+# If using IAM roles with conjur via the python3 api client use this function.
+# The client will not support auto-refreshing of token when using iam authentication so it is recommended to call this
+# method everytime you make a client request. An issue/enhancement has ben created on the conjur-python3-api
+# github to address this issue however this is a work around for the time being.
+def create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_file,
+                             iam_role_name=None, access_key=None, secret_key=None, token=None, ssl_verify=True):
     appliance_url = appliance_url.rstrip("/")
     # create our client with a placeholder api key
     connection_info = ConjurConnectionInfo(conjur_url=appliance_url,account=account,cert_file=cert_file)
@@ -244,7 +266,8 @@ def create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_f
     #client.set_top_source_name("cour_iam_client/"+latest_version)
 
     # now obtain the iam session_token
-    session_token = get_conjur_iam_session_token(appliance_url, account, service_id, host_id, cert_file, iam_role_name, access_key, secret_key, token, ssl_verify)
+    session_token = get_conjur_iam_session_token(appliance_url, account, service_id, host_id,
+                                                 cert_file, iam_role_name, access_key, secret_key, token, ssl_verify)
 
     # override the _api_token with the token created in get_conjur_iam_session_token
     client._api._api_token = session_token
@@ -261,11 +284,14 @@ def create_conjur_iam_client_from_env(iam_role_name=None, access_key=None, secre
         cert_file = None
         if 'CONJUR_CERT_FILE' in os.environ:
             cert_file = os.environ['CONJUR_CERT_FILE']
-        return create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_file, iam_role_name, access_key, secret_key, token, ssl_verify)
-    except KeyError as e:
-        raise KeyError("Failed to retrieve environment variable: {}".format(e))
+        return create_conjur_iam_client(appliance_url, account, service_id, host_id, cert_file,
+                                        iam_role_name, access_key, secret_key, token, ssl_verify)
+    except KeyError as err:
+        raise KeyError(f"Failed to retrieve environment variable: {err}") from err
 
 
 # Examples of using methods:
-# get_conjur_iam_session_token(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'], os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
-# create_conjur_iam_client(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'], os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
+# get_conjur_iam_session_token(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'],
+#   os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])
+# create_conjur_iam_client(os.environ['CONJUR_APPLIANCE_URL'], os.environ['CONJUR_ACCOUNT'],
+#   os.environ['AUTHN_IAM_SERVICE_ID'], os.environ['CONJUR_AUTHN_LOGIN'], os.environ['CONJUR_CERT_FILE'])

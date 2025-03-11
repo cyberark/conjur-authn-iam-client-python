@@ -1,0 +1,4 @@
+# These are all in test files
+3e2f7de30308b78187eb0aa9390c9fdca7bed833:test/https_config/conjur.key:private-key:1
+3e2f7de30308b78187eb0aa9390c9fdca7bed833:bin/test:generic-api-key:6
+3e2f7de30308b78187eb0aa9390c9fdca7bed833:test/test_conjur_iam_client.py:generic-api-key:79
