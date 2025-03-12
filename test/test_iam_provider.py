@@ -1,8 +1,10 @@
-import unittest
-from unittest.mock import patch, MagicMock
-from io import StringIO
-from iam_provider import write_and_flush
 import sys
+import unittest
+from io import StringIO
+from unittest.mock import patch
+
+from iam_provider import write_and_flush
+
 
 class TestIAMProvider(unittest.TestCase):
 
