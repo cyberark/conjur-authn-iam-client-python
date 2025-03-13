@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "Running Pylint"
+docker build -f Dockerfile.pylint -t pylint-container .
+docker run --rm pylint-container
+echo

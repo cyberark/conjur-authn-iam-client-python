@@ -1,3 +1,5 @@
+"""Integration test cases for the Python conjur-authn-iam-client."""
+
 # Import required modules
 import os
 
@@ -16,17 +18,21 @@ else:
     CERT_FILE = os.environ['CONJUR_CERT_FILE']
 
 # Create Conjur IAM API key and assert it is not None
-conjur_api_key = create_conjur_iam_api_key()
-assert conjur_api_key is not None, "Conjur API key should not be None"
-print(conjur_api_key)
+CONJUR_API_KEY = create_conjur_iam_api_key()
+assert CONJUR_API_KEY is not None, "Conjur API key should not be None"
+print(CONJUR_API_KEY)
 
 # Get Conjur IAM session token and assert it is not None
-conjur_session_token = get_conjur_iam_session_token(appliance_url, conjur_account, service_id, username, CERT_FILE)
+conjur_session_token = get_conjur_iam_session_token(
+    appliance_url, conjur_account, service_id, username, CERT_FILE
+)
 assert conjur_session_token is not None, "Conjur session token should not be None"
 print(conjur_session_token)
 
 # Create Conjur IAM client and assert it is not None
-conjur_client = create_conjur_iam_client(appliance_url, conjur_account, service_id, username, CERT_FILE)
+conjur_client = create_conjur_iam_client(
+    appliance_url, conjur_account, service_id, username, CERT_FILE
+)
 assert conjur_client is not None, "Conjur IAM client should not be None"
 
 # Test the list method of Conjur IAM client and assert it returns a list

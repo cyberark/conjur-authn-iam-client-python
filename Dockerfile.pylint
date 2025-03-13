@@ -1,0 +1,10 @@
+FROM python:3.9-slim
+
+WORKDIR /conjur-authn-iam-client-python
+
+RUN pip install --no-cache-dir --upgrade pylint
+
+COPY . /conjur-authn-iam-client-python
+
+CMD ["pylint", "."]
+

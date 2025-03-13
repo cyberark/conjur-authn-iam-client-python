@@ -1,10 +1,15 @@
 #!/usr/bin/python3
+"""Creates a Conjur IAM client using environment variables."""
+
 import sys
 
 from conjur_iam_client import create_conjur_iam_client_from_env
 
 
 def write_and_flush(pipe, message):
+    """
+    Writes the given message to the pipe and immediately flushes the output buffer.
+    """
     pipe.write(message)
     pipe.flush()
 

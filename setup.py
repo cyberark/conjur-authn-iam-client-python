@@ -1,3 +1,8 @@
+"""
+Setup script for the Conjur IAM client package,
+defining metadata and installation parameters.
+"""
+
 from distutils.core import setup
 setup(name='conjur_iam_client',
       version='0.1',
