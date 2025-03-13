@@ -73,6 +73,14 @@ pipeline {
         }
     }
 
+    stage('Run python lint') {
+      steps {
+        script {
+          infrapool.agentSh './bin/lint'
+        }
+      }
+    }
+
     stage('Install Dependencies') {
     steps {
             sh 'pip install -r requirements.txt'
