@@ -105,8 +105,18 @@ class TestLearnTest(unittest.TestCase):
         self.assertNotEqual(MockMergeDictionariesnew.RESPONSE, result)
 
     @patch('conjur_iam_client.create_conjur_iam_api_key')
-    def test_get_conjur_iam_session_token(self, _mock_create_conjur_iam_api_key):
+    @patch('conjur_iam_client.requests.post')
+    def test_get_conjur_iam_session_token(self, mock_post, mock_create_key):
         """Test case to verify the retrieval of a Conjur IAM session token."""
+
+        # Mock the API key returned by create_conjur_iam_api_key
+        mock_create_key.return_value = 'mocked-api-key'
+
+        # Mock the response from requests.post
+        mock_response = mock_post.return_value
+        mock_response.status_code = 200
+        mock_response.text = 'mocked-session-token'
+
         result = get_conjur_iam_session_token(
             "http://testing.com",
             "account",
@@ -114,7 +124,8 @@ class TestLearnTest(unittest.TestCase):
             "121212121212",
             True, None, None, None, None, True
         )
-        self.assertEqual(1, result.find("html"))
+
+        self.assertEqual(result, 'mocked-session-token')
 
 if __name__ == '__main__':
     # pylint: disable=E1101

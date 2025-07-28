@@ -11,6 +11,7 @@ import os
 import sys
 import urllib.parse
 from datetime import timedelta
+import re
 
 # pylint: disable=import-error
 import requests  # pip install requests
@@ -297,6 +298,35 @@ def get_conjur_iam_session_token(
         raise ConjurIAMAuthnException()
     return res.text
 
+def get_version_from_changelog(file_path):
+    """
+    Extracts the first semantic version number from a changelog file.
+
+    Args:
+        file_path (str): Path to the changelog.md file.
+
+    Returns:
+        str or None: The first version number found in the format X.Y.Z, or None if not found.
+    """
+    cached_version = os.environ.get('INTEGRATION_VERSION')
+    if cached_version:
+        return cached_version.strip()
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        # Match version numbers like [1.2.3]
+        match = re.search(r'## \[(\d+\.\d+\.\d+)\]', content)
+        if match:
+            version = match.group(1)
+            os.environ['INTEGRATION_VERSION'] = version  # cache it
+            return version
+    except FileNotFoundError:
+        print(f"Warning: {file_path} not found. Using default version.")
+    version = "0.0.0"
+    os.environ['INTEGRATION_VERSION'] = version
+    return version
+
 # If using IAM roles with conjur via the python3 api client use this function.
 # The client will not support auto-refreshing of token when using iam authentication
 # so it is recommended to call this
@@ -335,6 +365,11 @@ def create_conjur_iam_client(
         ssl_verification_mode=ssl_verification_mode,
         async_mode=False
     )
+
+    client.set_integration_name("IAM Client")
+    client.set_integration_type("cybr-secretsmanager-python-sdk")
+    client.set_integration_version(get_version_from_changelog('CHANGELOG.md'))
+    client.set_vendor_name("AWS")
 
     # telemetry changes
     # latest_version = Client.get_latest_version(
