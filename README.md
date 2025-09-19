@@ -1,5 +1,5 @@
 # conjur-authn-iam-client-python
-Get an IAM signed request used for Conjur authentication or instantiate a Conjur SDK Python3 client using IAM authentication.
+Get an IAM signed request used for CyberArk Secrets Manager authentication or instantiate a CyberArk Secrets Manager SDK Python3 client using IAM authentication.
 
 ## Certification Level
 ![](https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md)
@@ -9,7 +9,7 @@ by CyberArk**. For more detailed information on our certification levels, see [o
 
 ## Requirements
 - Conjur OSS v1+
-- DAP v10+
+- CyberArk Secrets Manager, Self-Hosted v10+
 - python >= 3.6
 - summon >= 0.6.9
 
@@ -26,7 +26,7 @@ $ cd conjur-authn-iam-client-python; pip3 install --user .
 
 #### create_conjur_iam_api_key
 
-This function returns a JSON-formatted [AWS signature](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) header that can be used to authenticate to Conjur when using the IAM authenticator.
+This function returns a JSON-formatted [AWS signature](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) header that can be used to authenticate to Secrets Manager when using the IAM authenticator.
 
 ```python
 >>> from conjur_iam_client import *
@@ -35,7 +35,7 @@ This function returns a JSON-formatted [AWS signature](https://docs.aws.amazon.c
 
 #### get_conjur_iam_session_token
 
-This function uses the `create_conjur_iam_api_key` method to retrieve the AWS signature header, uses the header to authenticate to the Conjur API, and returns a Conjur [access token](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Operations/Services/Authentication-new.htm#Accesstokens).
+This function uses the `create_conjur_iam_api_key` method to retrieve the AWS signature header, uses the header to authenticate to the Secrets Manager API, and returns an [access token](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Operations/Services/Authentication-new.htm#Accesstokens).
 
 ```python
 from conjur_iam_client import *
@@ -49,8 +49,8 @@ conjur_session_token = get_conjur_iam_session_token(appliance_url, conjur_accoun
 
 #### create_conjur_iam_client
 
-This function uses the `get_conjur_iam_session_token` to create a Conjur access token and returns an
-instantiated [Conjur Python3 client](https://github.com/cyberark/conjur-api-python3). The client will not
+This function uses the `get_conjur_iam_session_token` to create an access token and returns an
+instantiated [CyberArk Secrets Manager Python3 client](https://github.com/cyberark/conjur-api-python3). The client will not
 automatically refresh the access token, so the client can only be used for 5-8 min. After this time, this
 method must be invoked again to instantiate another client.
 
