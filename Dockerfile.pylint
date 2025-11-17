@@ -1,8 +1,8 @@
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 WORKDIR /conjur-authn-iam-client-python
 
-RUN pip install --no-cache-dir --upgrade pylint
+RUN pip install --no-cache-dir --upgrade pylint setuptools
 
 COPY . /conjur-authn-iam-client-python
 
