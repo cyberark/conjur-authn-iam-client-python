@@ -1,4 +1,4 @@
-pytest==6.2.5
+pytest==9.0.3
 requests>=2.32.2
 conjur-api>=0.1.5
 coverage
